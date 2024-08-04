@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package travel;
+
+option go_package = "./pkg/pb";
+
+service CountryService {
+    rpc GetsCountry(GetsCountryRequest) returns (GetsCountryResponse) {}
+    rpc GetCountry(GetCountryRequest) returns (GetCountryResponse) {}
+    rpc CreateCountry(CreateCountryRequest) returns (CreateCountryResponse) {}
+    rpc UpdateCountry(UpdateCountryRequest) returns (UpdateCountryResponse) {}
+    rpc DeleteCountry(DeleteCountryRequest) returns (DeleteCountryResponse) {}
+}
+
+message Country {
+    int64 id = 1;
+	string Name = 2;
+	string Alpha2 = 3;
+	string Alpha3 = 4;
+	string CountryCode = 5;
+	string Iso31662 = 6;
+	string Region = 7;
+	string SubRegion = 8;
+	string IntermediateRegion = 9;
+	string RegionCode = 10;
+	string SubRegionCode = 11;
+	string IntermediateRegionCode = 12;
+	string CreatedAt = 13;
+	string UpdatedAt = 14;
+	string Deleted = 15;
+}
+
+message CountryHeader {
+    int64 page = 1;
+    int64 size = 2;
+    Query query = 3;
+    Sort  sort = 4;
+
+    message Query {
+        int64 id = 1;
+        string Name = 2;
+        string Alpha2 = 3;
+        string Alpha3 = 4;
+    }
+
+    message Sort {
+        int64 id = 1;
+        string Name = 2;
+        string Alpha2 = 3;
+        string Alpha3 = 4;
+    }
+}
+
+// Get
+message GetCountryRequest {
+    data GET_COUNTRY = 1;
+
+    message data {
+        int64 id = 1;
+        string Country = 2;
+    }
+}
+
+message GetCountryResponse {
+    data GET_COUNTRY = 1;
+
+    message data {
+        int64 status = 1;
+        Country data = 2;
+    }
+}
+
+// Gets
+message GetsCountryRequest {
+    CountryHeader GETS_COUNTRY = 1;
+}
+
+message GetsCountryResponse {
+    data GETS_COUNTRY = 1;
+
+    message data {
+        int64 status = 1;
+        int64 totalData = 2;
+        int64 totalPage = 3;
+        int64 currentPage = 4;
+        repeated Country data = 5;
+    }
+}
+
+// Create
+message CreateCountryRequest {
+    Country CREATE_COUNTRY = 1;
+}
+
+message CreateCountryResponse {
+    data CREATE_COUNTRY = 1;
+
+    message data {
+        int64 status = 1;
+        Country data = 2;
+    }
+}
+
+// Update
+message UpdateCountryRequest {
+    Country UPDATE_COUNTRY = 1;
+}
+
+message UpdateCountryResponse {
+    data UPDATE_COUNTRY = 1;
+
+    message data {
+        int64 status = 1;
+        Country data = 2;
+    }
+}
+
+// Delete
+message DeleteCountryRequest {
+    data DELETE_COUNTRY = 1;
+
+    message data {
+        int64 id = 1;
+    }
+}
+
+message DeleteCountryResponse {
+    data DELETE_COUNTRY = 1;
+
+    message data {
+        int64 status = 1;
+        string error = 2;
+    }
+}

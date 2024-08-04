@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package travel;
+
+option go_package = "./pkg/pb";
+
+service TravelService {
+    rpc GetsTravel(GetsTravelRequest) returns (GetsTravelResponse) {}
+    rpc GetTravel(GetTravelRequest) returns (GetTravelResponse) {}
+    rpc CreateTravel(CreateTravelRequest) returns (CreateTravelResponse) {}
+    rpc UpdateTravel(UpdateTravelRequest) returns (UpdateTravelResponse) {}
+    rpc DeleteTravel(DeleteTravelRequest) returns (DeleteTravelResponse) {}
+}
+
+message Travel {
+    int64 id = 1;
+	string TravelledCountriesCode = 2;
+	int64 Total = 3;
+	string CreatedAt = 4;
+	string UpdatedAt = 5;
+	string Deleted = 6;
+}
+
+message TravelHeader {
+    int64 page = 1;
+    int64 size = 2;
+    Query query = 3;
+    Sort  sort = 4;
+
+    message Query {
+        int64 id = 1;
+        string TravelledCountriesCode = 2;
+        int64 Total = 3;
+        string Search = 4;
+    }
+
+    message Sort {
+        string Field = 1;
+        string Order = 2;
+    }
+}
+
+// Get
+message GetTravelRequest {
+    data GET_TRAVEL = 1;
+
+    message data {
+        int64 id = 1;
+        string TravelledCountriesCode = 2;
+    }
+}
+
+message GetTravelResponse {
+    data GET_TRAVEL = 1;
+
+    message data {
+        int64 status = 1;
+        Travel data = 2;
+    }
+}
+
+// Gets
+message GetsTravelRequest {
+    TravelHeader GETS_TRAVEL = 1;
+}
+
+message GetsTravelResponse {
+    data GETS_TRAVEL = 1;
+
+    message data {
+        string search = 1;
+        bool next = 2;
+        bool back = 3;
+        int64 limit = 4;
+        int64 offset = 5;
+        int64 totalPage = 6;
+        int64 currentPage = 7;
+        string sort = 8;
+        string order = 9;
+        int64 recordsTotal = 10;
+        repeated DataTravel data = 11;
+
+        message DataTravel {
+            string field = 1;
+            string label = 2;
+            int64 total = 3;
+        }
+    }
+}
+
+// Create
+message CreateTravelRequest {
+    Travel CREATE_TRAVEL = 1;
+}
+
+message CreateTravelResponse {
+    data CREATE_TRAVEL = 1;
+
+    message data {
+        int64 status = 1;
+        Travel data = 2;
+    }
+}
+
+// Update
+message UpdateTravelRequest {
+    Travel UPDATE_TRAVEL = 1;
+}
+
+message UpdateTravelResponse {
+    data UPDATE_TRAVEL = 1;
+
+    message data {
+        int64 status = 1;
+        Travel data = 2;
+    }
+}
+
+// Delete
+message DeleteTravelRequest {
+    data DELETE_TRAVEL = 1;
+
+    message data {
+        int64 id = 1;
+    }
+}
+
+message DeleteTravelResponse {
+    data DELETE_TRAVEL = 1;
+
+    message data {
+        int64 status = 1;
+        string error = 2;
+    }
+}
