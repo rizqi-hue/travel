@@ -11,7 +11,7 @@ type SearchForm = {
 };
 
 const TravelTable = () => {
-    const [isArrowDown, setIsArrowDown] = useState(true);
+    const [isArrowDown, setIsArrowDown] = useState(false);
     const [page, setPage] = useState(1)
     const [perPage, setPerPage] = useState(5)
     const [search, setSearch] = useState("")
@@ -176,7 +176,7 @@ const TravelTable = () => {
                                     <td className="rounded-l-full pl-5">
                                         <div className="flex flex-row gap-4 items-center">
                                             <div onClick={toggleArrow} className="flex justify-center items-center rounded-full cursor-pointer hover:bg-slate-600 p-2">
-                                                {isArrowDown ? <ArrowUp /> : <ArrowDown />}
+                                                {isArrowDown ? <ArrowDown /> : <ArrowUp />}
                                             </div>
                                             <p className="text-md leading-none">Country</p>
                                         </div>
