@@ -15,7 +15,7 @@ func NewFiberServer() {
 	app.Static("/public", "./public")
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin,Content-Type,Accept,Authorization,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin,X-Request-Id,X-System-Auth,X-User-Auth",
-		AllowOrigins:     "http://localhost:5173", // Specify allowed origins
+		AllowOrigins:     "http://localhost:5173, https://travel.unreadhub.com/", // Specify allowed origins
 		AllowCredentials: true,
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))
