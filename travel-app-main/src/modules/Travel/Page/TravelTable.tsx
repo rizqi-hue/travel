@@ -32,20 +32,6 @@ const TravelTable = () => {
 
     const toggleArrow = () => {
         setIsArrowDown(!isArrowDown);
-
-        dispatch(getsTravel({
-            filter: {
-                search: search,
-            },
-            pagination: {
-                page: page,
-                perPage: perPage,
-            },
-            sort: {
-                field: "travelled_countries_code",
-                order: !isArrowDown ? "ASC" : "DESC"
-            }
-        }));
     };
 
     useEffect(() => {
@@ -60,23 +46,18 @@ const TravelTable = () => {
                 },
                 sort: {
                     field: "travelled_countries_code",
-                    order: !isArrowDown ? "ASC" : "DESC"
+                    order: isArrowDown ? "DESC" : "ASC"
                 }
             }));
         }
 
-        // async function _getsDataForm() {
-        //     await dispatch(getsDataForm({}));
-        // }
-
-        // _getsDataForm();
         _getsTravel();
 
         if (isError) {
             // 
         }
 
-    }, [isError, page, perPage]);
+    }, [isError, page, perPage, isArrowDown]);
 
     const doSearch = (data: SearchForm) => {
         setSearch(data.q)
@@ -87,6 +68,10 @@ const TravelTable = () => {
             pagination: {
                 page: page,
                 perPage: perPage,
+            },
+            sort: {
+                field: "travelled_countries_code",
+                order: isArrowDown ? "DESC" : "ASC"
             }
         }));
     }
@@ -101,6 +86,10 @@ const TravelTable = () => {
             pagination: {
                 page: page,
                 perPage: perPage,
+            },
+            sort: {
+                field: "travelled_countries_code",
+                order: isArrowDown ? "DESC" : "ASC"
             }
         }));
     }
