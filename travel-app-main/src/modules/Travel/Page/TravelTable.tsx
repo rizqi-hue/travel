@@ -61,12 +61,13 @@ const TravelTable = () => {
 
     const doSearch = (data: SearchForm) => {
         setSearch(data.q)
+        setPage(1)
         dispatch(getsTravel({
             filter: {
                 search: data.q,
             },
             pagination: {
-                page: page,
+                page: 1,
                 perPage: perPage,
             },
             sort: {
