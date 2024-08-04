@@ -16,6 +16,10 @@ func Pagination(page int64, size int64) *paginate {
 		limit = 5
 	}
 
+	if limit > 50 {
+		limit = 50
+	}
+
 	offset := (page * limit) - limit
 
 	return &paginate{

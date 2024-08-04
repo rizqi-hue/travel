@@ -13,7 +13,7 @@ type SearchForm = {
 const TravelTable = () => {
     const [isArrowDown, setIsArrowDown] = useState(true);
     const [page, setPage] = useState(1)
-    const [perPage] = useState(10)
+    const [perPage, setPerPage] = useState(5)
     const [search, setSearch] = useState("")
     const dispatch = useAppDispatch();
 
@@ -52,11 +52,15 @@ const TravelTable = () => {
         async function _getsTravel() {
             await dispatch(getsTravel({
                 filter: {
-                    search: "",
+                    search: search,
                 },
                 pagination: {
                     page: page,
                     perPage: perPage
+                },
+                sort: {
+                    field: "travelled_countries_code",
+                    order: !isArrowDown ? "ASC" : "DESC"
                 }
             }));
         }
@@ -72,7 +76,7 @@ const TravelTable = () => {
             // 
         }
 
-    }, [isError, page]);
+    }, [isError, page, perPage]);
 
     const doSearch = (data: SearchForm) => {
         setSearch(data.q)
@@ -101,48 +105,67 @@ const TravelTable = () => {
         }));
     }
 
-    console.log(list.GETS_TRAVEL.recordsTotal)
     return (
         <>
             <div className="w-full">
                 <div className="bg-white rounded-2xl py-4 md:py-7 px-4 md:px-8 xl:px-10">
                     <div className='w-full flex flex-col md:flex-row justify-between items-center'>
-                        <div className="p-2 flex flex-row w-full">
-                            Total Data : {list.GETS_TRAVEL.recordsTotal}
+                        <div className="w-full p-2 flex flex-row space-x-10">
+                            <span> Total Data : {list.GETS_TRAVEL.recordsTotal}</span>
+                            <span> Page : {list.GETS_TRAVEL.currentPage}</span>
+                            <span> Per Page : {list.GETS_TRAVEL.limit}</span>
                         </div>
+                        <div className="w-full flex flex-col md:flex-row justify-end md:space-x-4">
 
-                        <form
-                            onSubmit={handleSubmit(doSearch)}
-                            className="search-form w-full justify-end flex flex-col md:flex-row mb-5 md:space-x-2 space-y-2 md:space-y-0"
-                        >
-                            <label className="relative block  xl:w-[180px] 2xl:w-[330px]">
-                                <input
-                                    className="block bg-[#F2F2F8] w-[330px] rounded-full py-[14px] px-[30px] placeholder:text-[#4C4C4C] focus:outline-none"
-                                    placeholder="Country Name"
-                                    type="text"
-                                    id="q"
-                                    {...register("q")}
-                                />
+                            <select
+                                className="mb-2 h-14 bg-[#F2F2F8] w-full md:w-20 rounded-full p-3 placeholder:text-[#4C4C4C] focus:outline-none"
+                                onChange={(v) => {
+                                    setPerPage(parseInt(v.target.value))
+                                }}
+                            >
+                                <option selected value={5} >5</option>
+                                <option value={10}>10</option>
+                                <option value={20}>20</option>
+                                <option value={30}>30</option>
+                                <option value={40}>40</option>
+                                <option value={50}>50</option>
+                            </select>
 
-                                <button
-                                    type="submit"
-                                    className="absolute bg-red-200 top-2 bottom-2 rounded-l-full px-3 text-red-500 hover:bg-red-300  inset-y-0 right-[60px] flex items-center"
-                                >
-                                    <SearchNormal1 className='mr-1' />
-                                    <span>Cari</span>
-                                </button>
-                                <button
-                                    onClick={doReset}
-                                    type="button"
-                                    className="absolute bg-gray-200 top-2 bottom-2 rounded-r-full px-3 text-gray-500 hover:bg-gray-300  inset-y-0 right-[10px] flex items-center"
-                                >
-                                    <Refresh2 className='mr-1' />
-                                </button>
-                            </label>
-                            <span className='text-red-500 ml-8'>
-                                {errors.q && errors.q?.message}
-                            </span>
-                        </form>
+                            <form
+                                onSubmit={handleSubmit(doSearch)}
+                                className="flex flex-col w-full md:flex-row justify-end mb-5 md:space-x-2 space-y-2 md:space-y-0"
+                            >
+                                <label className="w-full">
+                                    <input
+                                        className="bg-[#F2F2F8] w-full rounded-full py-[14px] px-[30px] placeholder:text-[#4C4C4C] focus:outline-none"
+                                        placeholder="Country Name"
+                                        type="text"
+                                        id="q"
+                                        {...register("q")}
+                                    />
+                                </label>
+                                <div className="justify-end flex flex-row h-12">
+                                    <button
+                                        type="submit"
+                                        className=" bg-red-200 rounded-l-full px-3 text-red-500 hover:bg-red-300 flex items-center"
+                                    >
+                                        <SearchNormal1 className='mr-1' />
+                                        <span>Cari</span>
+                                    </button>
+                                    <button
+                                        onClick={doReset}
+                                        type="button"
+                                        className=" bg-gray-200 rounded-r-full px-3 text-gray-500 hover:bg-gray-300 flex items-center"
+                                    >
+                                        <Refresh2 className='mr-1' />
+                                    </button>
+                                </div>
+
+                                <span className='text-red-500 ml-8'>
+                                    {errors.q && errors.q?.message}
+                                </span>
+                            </form>
+                        </div>
 
                     </div>
 
@@ -158,7 +181,7 @@ const TravelTable = () => {
                                             <p className="text-md leading-none">Country</p>
                                         </div>
                                     </td>
-                                    <td className="pl-5 rounded-r-full">
+                                    <td className="rounded-r-full">
                                         <div className="flex items-center">
                                             <p className="text-base font-medium leading-none">Total</p>
                                         </div>
@@ -171,8 +194,13 @@ const TravelTable = () => {
                                         list.GETS_TRAVEL.data && list.GETS_TRAVEL.data.map((value, index) => {
                                             return (
                                                 <tr key={`-${index}`} className="mb-3 focus:outline-none h-16 border-b-2 border-gray-100">
-                                                    <td className="">
-                                                        <div className="ml-16 flex items-center">
+                                                    <td className="flex flex-row items-center mt-6">
+                                                        <div className="ml-7 flex items-center">
+                                                            <p className="text-md font-bold leading-none text-gray-700 ml-2">
+                                                                {index + 1}
+                                                            </p>
+                                                        </div>
+                                                        <div className="ml-6 md:ml-16 flex items-center">
                                                             <p className="text-md font-bold leading-none text-gray-700 ml-2">
                                                                 {value.label}
                                                             </p>
