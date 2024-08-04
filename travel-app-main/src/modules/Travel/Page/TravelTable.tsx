@@ -187,7 +187,7 @@ const TravelTable = () => {
                                                     <td className="flex flex-row items-center mt-6">
                                                         <div className="ml-7 flex items-center">
                                                             <p className="text-md font-bold leading-none text-gray-700 ml-2">
-                                                                {index + 1}
+                                                                {index + 1 + (page * perPage) - perPage}
                                                             </p>
                                                         </div>
                                                         <div className="ml-6 md:ml-16 flex items-center">
